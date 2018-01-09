@@ -14,8 +14,11 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView mNumero, mHighScore;
     private int valor, highscore;
+    private String resultado;
+    private String guardado="guardado";
 
     private static final String NUMEROALTO="numAlto";
+    private static final String HSCORE="hScore";
 
 
     @Override
@@ -23,49 +26,53 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        prefs=getSharedPreferences(NUMEROALTO, Context.MODE_PRIVATE);
+        prefs=getSharedPreferences(guardado, MODE_PRIVATE);
 
         mNumero=(TextView)findViewById(R.id.textViewNumero);
         mHighScore=(TextView)findViewById(R.id.textViewHighScore);
 
-        mHighScore.setText(prefs.getString(NUMEROALTO,""));
+        mHighScore.setText(prefs.getString(NUMEROALTO,"0"));
+        highscore=prefs.getInt(HSCORE,0);
 
     }
 
     public void Play(View v) {
 
         valor = (int) (Math.random() * 500);
-        String resultado = String.valueOf(valor);
+        resultado = String.valueOf(valor);
         mNumero.setText(resultado);
 
-        if (highscore<valor) {
+        if (highscore<valor)
                 highscore = valor;
-        }
 
         String hs=String.valueOf(highscore);
 
         mHighScore.setText(hs);
 
-
-
-    }
-
-    public void Reset(View v){
-        valor=0;
-        String resultado=String.valueOf(valor);
-        mNumero.setText(resultado);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        prefs=getSharedPreferences(NUMEROALTO, Context.MODE_PRIVATE);
+        prefs=getSharedPreferences(guardado, MODE_PRIVATE);
         SharedPreferences.Editor editor=prefs.edit();
+
         //salvar los valores en la vista Edittext a preferencias
         editor.putString(NUMEROALTO,mHighScore.getText().toString());
+        editor.putInt(HSCORE,highscore);
 
         //salvar los valores
         editor.commit();
+    }
 
+    public void Reset(View v){
+        highscore=0;
+        String resultado=String.valueOf(highscore);
+        mHighScore.setText(resultado);
+
+        prefs=getSharedPreferences(guardado, MODE_PRIVATE);
+        SharedPreferences.Editor editor=prefs.edit();
+
+        //salvar los valores en la vista Edittext a preferencias
+        editor.putString(NUMEROALTO,mHighScore.getText().toString());
+        editor.putInt(HSCORE,highscore);
+
+        //salvar los valores
+        editor.commit();
     }
 }
