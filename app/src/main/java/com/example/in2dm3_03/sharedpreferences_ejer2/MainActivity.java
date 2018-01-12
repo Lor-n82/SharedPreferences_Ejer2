@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         highscore=0;
         String resultado=String.valueOf(highscore);
         mHighScore.setText(resultado);
+        mNumero.setText(resultado);
 
         prefs=getSharedPreferences(guardado, MODE_PRIVATE);
         SharedPreferences.Editor editor=prefs.edit();
